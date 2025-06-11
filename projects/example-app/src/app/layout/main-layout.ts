@@ -175,7 +175,12 @@ interface NavigationItem {
             <button mat-icon-button matTooltip="Notifications">
               <mat-icon>notifications</mat-icon>
             </button>
-            <button mat-icon-button matTooltip="Account">
+            <button
+              mat-icon-button
+              matTooltip="Account"
+              (click)="navigateToSettings()"
+              aria-label="Navigate to settings"
+            >
               <mat-icon>account_circle</mat-icon>
             </button>
           </mat-toolbar>
@@ -289,6 +294,10 @@ export class MainLayout {
     if (this.breakpointObserver.isMatched(Breakpoints.Handset)) {
       drawer.close();
     }
+  }
+
+  protected navigateToSettings(): void {
+    this.router.navigate(['/settings']);
   }
 
   protected navigateToSettings(): void {
