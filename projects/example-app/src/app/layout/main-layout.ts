@@ -17,6 +17,8 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { map, shareReplay } from 'rxjs/operators';
+import { MenuButton } from '@ui/menu-button';
+import { MenuRouting } from '@core/menu/menu-routing';
 
 interface NavigationItem {
   readonly route: string;
@@ -38,6 +40,7 @@ interface NavigationItem {
     RouterLink,
     RouterLinkActive,
     RouterOutlet,
+    MenuButton,
   ],
   template: `
     <mat-sidenav-container
@@ -88,6 +91,7 @@ interface NavigationItem {
         } @else {
           <!-- Desktop: Material 3 Navigation Rail -->
           <nav class="pt-4 px-3">
+            <my-org-menu-button />
             @for (item of navigationItems; track item.route) {
               <a
                 [routerLink]="['/', item.route]"
@@ -190,6 +194,7 @@ interface NavigationItem {
 })
 export class MainLayout implements AfterViewInit {
   private readonly breakpointObserver = inject(BreakpointObserver);
+  private readonly menuRouting = inject(MenuRouting);
 
   @ViewChild('mainContent', { static: false })
   mainContent!: ElementRef<HTMLElement>;
