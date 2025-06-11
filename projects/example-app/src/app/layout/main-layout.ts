@@ -8,6 +8,7 @@ import {
   signal,
   ViewChild,
   AfterViewInit,
+  computed,
 } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -15,8 +16,15 @@ import { MatListModule } from '@angular/material/list';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
-import { map, shareReplay } from 'rxjs/operators';
+import {
+  Router,
+  RouterLink,
+  RouterLinkActive,
+  RouterOutlet,
+  NavigationEnd,
+} from '@angular/router';
+import { map, shareReplay, filter } from 'rxjs/operators';
+import { toSignal } from '@angular/core/rxjs-interop';
 
 interface NavigationItem {
   readonly route: string;
@@ -153,9 +161,7 @@ interface NavigationItem {
               </button>
             }
 
-            <span class="text-xl font-normal tracking-wide">{{
-              currentPageTitle()
-            }}</span>
+            <span>{{ currentPageTitle() }}</span>
 
             <span class="flex-1"></span>
 
@@ -190,6 +196,7 @@ interface NavigationItem {
 })
 export class MainLayout implements AfterViewInit {
   private readonly breakpointObserver = inject(BreakpointObserver);
+  private readonly router = inject(Router);
 
   @ViewChild('mainContent', { static: false })
   mainContent!: ElementRef<HTMLElement>;
@@ -201,17 +208,29 @@ export class MainLayout implements AfterViewInit {
       shareReplay()
     );
 
-  protected readonly currentPageTitle = signal('Dashboard');
+  private readonly currentRoute = toSignal(
+    this.router.events.pipe(
+      filter((event) => event instanceof NavigationEnd),
+      map((event) => (event as NavigationEnd).urlAfterRedirects)
+    ),
+    { initialValue: this.router.url }
+  );
+
+  protected readonly currentNavigationItem = computed(() => {
+    const url = this.currentRoute();
+    const route = url.replace('/', '');
+    return this.navigationItems.find((item) => item.route === route);
+  });
+
+  protected readonly currentPageTitle = computed(() => {
+    const navigationItem = this.currentNavigationItem();
+    return navigationItem?.label || 'Dashboard';
+  });
+
   protected readonly isScrolled = signal(false);
 
-  ngAfterViewInit(): void {
-    if (this.mainContent) {
-      this.mainContent.nativeElement.addEventListener('scroll', () => {
-        const scrollTop = this.mainContent.nativeElement.scrollTop;
-        console.log('Scroll detected:', scrollTop); // Debug
-        this.isScrolled.set(scrollTop > 5); // Seuil de 5px pour éviter les micro-scrolls
-      });
-    }
+  constructor() {
+    // No need to initialize effect or ngAfterViewInit as computed signals handle updates
   }
 
   protected readonly navigationItems: readonly NavigationItem[] = [
@@ -256,6 +275,16 @@ export class MainLayout implements AfterViewInit {
   protected closeDrawerOnMobile(drawer: { close: () => void }): void {
     if (this.breakpointObserver.isMatched(Breakpoints.Handset)) {
       drawer.close();
+    }
+  }
+
+  ngAfterViewInit(): void {
+    if (this.mainContent) {
+      this.mainContent.nativeElement.addEventListener('scroll', () => {
+        const scrollTop = this.mainContent.nativeElement.scrollTop;
+        console.log('Scroll detected:', scrollTop);
+        this.isScrolled.set(scrollTop > 5);
+      });
     }
   }
 }
