@@ -123,7 +123,7 @@
               "projects/example-app/**/*.ts",
               "projects/example-app/**/*.html"
             ],
-            "eslintConfig": "projects/example-app/eslint.config.js"
+            "eslintConfig": "eslint.config.js"
           }
         }
       }
