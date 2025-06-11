@@ -21,7 +21,7 @@ import { MatIconModule } from '@angular/material/icon';
       <!-- Cards Grid - Pure Tailwind Layout + Material Components -->
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         <!-- Metric Card - No custom CSS, pure Material + Tailwind -->
-        <mat-card>
+        <mat-card appearance="outlined">
           <mat-card-content class="p-6">
             <div class="flex items-start justify-between mb-4">
               <div>
@@ -49,7 +49,7 @@ import { MatIconModule } from '@angular/material/icon';
           </mat-card-content>
         </mat-card>
 
-        <mat-card>
+        <mat-card appearance="outlined">
           <mat-card-content class="p-6">
             <div class="flex items-start justify-between mb-4">
               <div>
@@ -77,7 +77,7 @@ import { MatIconModule } from '@angular/material/icon';
           </mat-card-content>
         </mat-card>
 
-        <mat-card>
+        <mat-card appearance="outlined">
           <mat-card-content class="p-6">
             <div class="flex items-start justify-between mb-4">
               <div>
@@ -112,7 +112,7 @@ import { MatIconModule } from '@angular/material/icon';
           Actions rapides
         </h2>
         <div class="flex flex-wrap gap-3">
-          <button mat-raised-button color="primary">
+          <button mat-flat-button color="primary">
             <mat-icon class="mr-2">add</mat-icon>
             Nouveau projet
           </button>

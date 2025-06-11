@@ -31,7 +31,7 @@ import { RouterLink } from '@angular/router';
         <div
           class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 auto-rows-fr"
         >
-          <mat-card class="flex flex-col h-full">
+          <mat-card appearance="outlined" class="flex flex-col h-full">
             <mat-card-content class="text-center p-8 flex-grow">
               <mat-icon class="text-5xl mb-4 text-[var(--mat-sys-primary)]"
                 >dashboard</mat-icon
@@ -54,7 +54,7 @@ import { RouterLink } from '@angular/router';
             </mat-card-actions>
           </mat-card>
 
-          <mat-card class="flex flex-col h-full">
+          <mat-card appearance="outlined" class="flex flex-col h-full">
             <mat-card-content class="text-center p-8 flex-grow">
               <mat-icon class="text-5xl mb-4 text-[var(--mat-sys-primary)]"
                 >analytics</mat-icon
@@ -77,7 +77,7 @@ import { RouterLink } from '@angular/router';
             </mat-card-actions>
           </mat-card>
 
-          <mat-card class="flex flex-col h-full">
+          <mat-card appearance="outlined" class="flex flex-col h-full">
             <mat-card-content class="text-center p-8 flex-grow">
               <mat-icon class="text-5xl mb-4 text-[var(--mat-sys-primary)]"
                 >folder</mat-icon
@@ -100,7 +100,7 @@ import { RouterLink } from '@angular/router';
             </mat-card-actions>
           </mat-card>
 
-          <mat-card class="flex flex-col h-full">
+          <mat-card appearance="outlined" class="flex flex-col h-full">
             <mat-card-content class="text-center p-8 flex-grow">
               <mat-icon class="text-5xl mb-4 text-[var(--mat-sys-primary)]"
                 >group</mat-icon
