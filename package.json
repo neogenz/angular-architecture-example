@@ -12,8 +12,8 @@
     "analyze": "ng build --stats-json --output-hashing none --named-chunks && esbuild-visualizer --template treemap --metadata dist/example-app/stats.json --filename dist/example-app/analyse/index.html && http-server -o -c-1 ./dist/example-app/analyse/",
     "analyze:sme": "ng build --source-map --output-hashing none --named-chunks && source-map-explorer dist/example-app/browser/*.js --html dist/example-app/sme/index.html && http-server -o -c-1 ./dist/example-app/sme/",
     "analyze:deps": "npm-run-all analyze:deps:*",
-    "analyze:deps:all": "madge projects/example-app/src/main.ts --ts-config tsconfig.json --image ./deps/example-app/_all.jpg",
-    "analyze:deps:ui": "madge --extensions ts --ts-config tsconfig.json --image ./deps/example-app/ui.png projects/example-app/src/app/ui/",
+    "analyze:deps:all": "madge projects/example-app/src/main.ts --ts-config projects/example-app/tsconfig.app.json --image ./deps/example-app/_all.jpg",
+    "analyze:deps:ui": "madge --extensions ts --ts-config projects/example-app/tsconfig.app.json --image ./deps/example-app/ui.png projects/example-app/src/app/ui/",
     "lint": "ng lint"
   },
   "private": true,
