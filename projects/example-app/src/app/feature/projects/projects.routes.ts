@@ -1,10 +1,14 @@
 import { Routes } from '@angular/router';
-import { Projects } from './projects';
+import { CursorRulesManagerService } from './details/cursor-rules-manager/cursor-rules-manager.service';
 
 export default [
   {
     path: '',
-    pathMatch: 'full',
-    component: Projects,
+    loadComponent: () => import('./list/projects'),
+  },
+  {
+    path: ':projectId',
+    providers: [CursorRulesManagerService],
+    loadComponent: () => import('./details/project-details'),
   },
 ] as Routes;
