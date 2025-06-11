@@ -1,15 +1,13 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
+import { ScrollDispatcher } from '@angular/cdk/scrolling';
 import { AsyncPipe } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
-  ElementRef,
-  inject,
-  signal,
-  ViewChild,
-  AfterViewInit,
   computed,
+  inject,
 } from '@angular/core';
+import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
@@ -17,14 +15,19 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import {
+  NavigationEnd,
   Router,
   RouterLink,
   RouterLinkActive,
   RouterOutlet,
-  NavigationEnd,
 } from '@angular/router';
-import { map, shareReplay, filter } from 'rxjs/operators';
-import { toSignal } from '@angular/core/rxjs-interop';
+import {
+  filter,
+  map,
+  shareReplay,
+  startWith,
+  throttleTime,
+} from 'rxjs/operators';
 
 interface NavigationItem {
   readonly route: string;
@@ -179,7 +182,7 @@ interface NavigationItem {
 
           <!-- Page Content - Scrollable Container -->
           <main
-            #mainContent
+            cdkScrollable
             class="flex-1 overflow-y-auto bg-[var(--mat-sys-surface)] text-[var(--mat-sys-on-surface)]"
             [class.p-6]="(isHandset$ | async) === false"
             [class.md:p-8]="(isHandset$ | async) === false"
@@ -194,12 +197,10 @@ interface NavigationItem {
   styles: ``,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class MainLayout implements AfterViewInit {
+export class MainLayout {
   private readonly breakpointObserver = inject(BreakpointObserver);
   private readonly router = inject(Router);
-
-  @ViewChild('mainContent', { static: false })
-  mainContent!: ElementRef<HTMLElement>;
+  private readonly scrollDispatcher = inject(ScrollDispatcher);
 
   protected readonly isHandset$ = this.breakpointObserver
     .observe(Breakpoints.Handset)
@@ -227,7 +228,19 @@ export class MainLayout implements AfterViewInit {
     return navigationItem?.label || 'Dashboard';
   });
 
-  protected readonly isScrolled = signal(false);
+  protected isScrolled = toSignal(
+    this.scrollDispatcher.scrolled(100).pipe(
+      takeUntilDestroyed(),
+      map((scrollable) => {
+        const top = scrollable
+          ? scrollable.getElementRef().nativeElement.scrollTop
+          : 0;
+        return top > 0;
+      }),
+      startWith(false)
+    ),
+    { initialValue: false }
+  );
 
   constructor() {
     // No need to initialize effect or ngAfterViewInit as computed signals handle updates
@@ -278,13 +291,7 @@ export class MainLayout implements AfterViewInit {
     }
   }
 
-  ngAfterViewInit(): void {
-    if (this.mainContent) {
-      this.mainContent.nativeElement.addEventListener('scroll', () => {
-        const scrollTop = this.mainContent.nativeElement.scrollTop;
-        console.log('Scroll detected:', scrollTop);
-        this.isScrolled.set(scrollTop > 5);
-      });
-    }
+  protected navigateToSettings(): void {
+    this.router.navigate(['/settings']);
   }
 }
