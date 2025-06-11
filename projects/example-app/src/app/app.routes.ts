@@ -12,27 +12,23 @@ export const routes: Routes = [
   },
   {
     path: 'dashboard',
-    loadComponent: () =>
-      import('./feature/dashboard/dashboard').then((m) => m.Dashboard),
+    loadChildren: () => import('./feature/dashboard/dashboard.routes'),
   },
   {
     path: 'analytics',
-    loadComponent: () =>
-      import('./feature/analytics/analytics').then((m) => m.Analytics),
+    loadChildren: () => import('./feature/analytics/analytics.routes'),
   },
   {
     path: 'projects',
-    loadComponent: () =>
-      import('./feature/projects/projects').then((m) => m.Projects),
+    loadChildren: () => import('./feature/projects/projects.routes'),
   },
   {
     path: 'team',
-    loadComponent: () => import('./feature/team/team').then((m) => m.Team),
+    loadChildren: () => import('./feature/team/team.routes'),
   },
   {
     path: 'settings',
-    loadComponent: () =>
-      import('./feature/settings/settings').then((m) => m.Settings),
+    loadChildren: () => import('./feature/settings/settings.routes'),
   },
   {
     path: '**', // fallback route (can be used to display dedicated 404 lazy feature)

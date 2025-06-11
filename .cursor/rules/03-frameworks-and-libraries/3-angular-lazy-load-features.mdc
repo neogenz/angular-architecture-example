@@ -1,0 +1,10 @@
+---
+description: 
+globs: projects/example-app/src/app/app.routes.ts,projects/example-app/src/app/feature/**/*.routes.ts
+alwaysApply: false
+---
+Lazy Loading Features:
+- Use `loadChildren` for lazy loading feature routes.
+- Employ dynamic `import()` for feature route files.
+- Export feature routes using `export default`.
+- Cast the exported route array `as Routes`.
