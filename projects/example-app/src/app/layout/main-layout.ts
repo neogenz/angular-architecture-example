@@ -21,13 +21,7 @@ import {
   RouterLinkActive,
   RouterOutlet,
 } from '@angular/router';
-import {
-  filter,
-  map,
-  shareReplay,
-  startWith,
-  throttleTime,
-} from 'rxjs/operators';
+import { filter, map, shareReplay, startWith } from 'rxjs/operators';
 
 interface NavigationItem {
   readonly route: string;
@@ -300,11 +294,15 @@ export class MainLayout {
     this.router.navigate(['/settings']);
   }
 
-  protected navigateToSettings(): void {
-    this.router.navigate(['/settings']);
+  protected navigateToTeam(): void {
+    this.router.navigate(['/team']);
   }
 
-  protected navigateToSettings(): void {
-    this.router.navigate(['/settings']);
+  protected navigateToHome(): void {
+    this.router.navigate(['/home']);
+  }
+
+  protected navigateToDashboard(): void {
+    this.router.navigate(['/dashboard']);
   }
 }
