@@ -303,4 +303,8 @@ export class MainLayout {
   protected navigateToSettings(): void {
     this.router.navigate(['/settings']);
   }
+
+  protected navigateToSettings(): void {
+    this.router.navigate(['/settings']);
+  }
 }
