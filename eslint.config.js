@@ -234,22 +234,6 @@ module.exports = tseslint.config(
               from: ['lib'],
               allow: [['lib', { lib: '${from.lib}' }]],
             },
-            {
-              from: ['test-config'],
-              allow: [['lib-api']],
-            },
-            {
-              from: ['test-spec'],
-              allow: [
-                ['lib-api'],
-                ['core', { app: '${from.app}' }],
-                ['ui', { app: '${from.app}' }],
-                ['layout', { app: '${from.app}' }],
-                ['pattern', { app: '${from.app}' }],
-                ['feature', { app: '${from.app}' }],
-                ['env', { app: '${from.app}' }],
-              ],
-            },
           ],
         },
       ],
