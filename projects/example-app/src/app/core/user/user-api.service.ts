@@ -1,10 +1,12 @@
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { delay } from 'rxjs/operators';
-import { User } from './models/user.model';
+import { User } from './user.model';
 
-@Injectable()
-export class UserApi {
+@Injectable({
+  providedIn: 'root'
+})
+export class UserApiService {
   getCurrentUser(): Observable<User> {
     return of(mockUser).pipe(delay(500));
   }
