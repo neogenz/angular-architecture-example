@@ -3,7 +3,7 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 @Component({
   selector: 'my-org-team',
   imports: [],
-  template: ` <p>team works!</p> `,
+  template: ` Moi : Marie Dupont `,
   styles: `
     :host {
       display: block;
