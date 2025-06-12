@@ -18,8 +18,10 @@ import { MatIconModule } from '@angular/material/icon';
             <mat-chip
               class="bg-secondary-container text-on-secondary-container h-12 px-6 text-body-medium"
             >
-              <mat-icon class="mr-2">settings</mat-icon>
-              {{ tech }}
+              <div class="flex items-center justify-center gap-2">
+                <mat-icon class="text-on-surface">settings</mat-icon>
+                {{ tech }}
+              </div>
             </mat-chip>
           }
         </mat-chip-set>

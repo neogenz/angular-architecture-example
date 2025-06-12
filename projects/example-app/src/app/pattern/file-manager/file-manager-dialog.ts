@@ -15,18 +15,25 @@ import {
 } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 
-import { CursorRulesManagerService } from './cursor-rules-manager.service';
-import { FileEditorDialog } from './file-editor-dialog';
-import { FileItem } from './file-item';
+import { FileManagerApi } from '@core/file-manager/file-manager-api';
+import { FileItem } from '@core/file-manager/file-item-model';
 import { firstValueFrom } from 'rxjs';
+import { FileEditorDialog } from './file-editor-dialog';
+import { FilesList } from '@ui/files-list';
 
 @Component({
-  selector: 'my-org-cursor-rules-manager',
-  imports: [MatButtonModule, MatDialogModule, MatIconModule, MatCardModule],
+  selector: 'my-org-file-manager-dialog',
+  imports: [
+    MatButtonModule,
+    MatDialogModule,
+    MatIconModule,
+    MatCardModule,
+    FilesList,
+  ],
   template: `
     <h2 mat-dialog-title class="flex items-center gap-3">
       <mat-icon class="text-primary">rule</mat-icon>
-      Gestionnaire de Règles Cursor
+      {{ title }}
     </h2>
 
     <mat-dialog-content
@@ -66,46 +73,13 @@ import { firstValueFrom } from 'rxjs';
             </h3>
 
             <div class="bg-surface-container rounded-2xl overflow-hidden">
-              @for (file of files(); track file.name) {
-                <div
-                  class="flex items-center p-4 border-b border-outline-variant last:border-b-0 hover:bg-surface-container-high transition-colors"
-                >
-                  <mat-icon class="text-primary mr-4 flex-shrink-0"
-                    >description</mat-icon
-                  >
-
-                  <div class="flex-1 min-w-0 mr-4">
-                    <div
-                      class="text-body-large font-medium text-on-surface mb-1"
-                    >
-                      {{ file.name }}
-                    </div>
-                    <div class="text-body-small text-on-surface-variant">
-                      Modifié le {{ formatDate(file.lastModified) }}
-                    </div>
-                  </div>
-
-                  <div class="flex gap-2 flex-shrink-0">
-                    <button
-                      matIconButton
-                      (click)="editFile(file)"
-                      [attr.aria-label]="'Éditer le fichier ' + file.name"
-                      class="text-primary"
-                    >
-                      <mat-icon>edit</mat-icon>
-                    </button>
-
-                    <button
-                      matIconButton
-                      (click)="deleteFile(file.name)"
-                      [attr.aria-label]="'Supprimer le fichier ' + file.name"
-                      class="text-error"
-                    >
-                      <mat-icon>delete</mat-icon>
-                    </button>
-                  </div>
-                </div>
-              }
+              <my-org-files-list
+                [files]="files()"
+                [supportedActions]="{
+                  isEditable: true,
+                  isDeletable: true,
+                }"
+              />
             </div>
           </div>
         } @else {
@@ -195,12 +169,13 @@ import { firstValueFrom } from 'rxjs';
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class CursorRulesManager implements OnInit {
+export class FileManagerDialog implements OnInit {
   readonly #dialog = inject(MatDialog);
-  readonly #dialogRef = inject(MatDialogRef<CursorRulesManager>);
-  readonly #fileManagerService = inject(CursorRulesManagerService);
+  readonly #dialogRef = inject(MatDialogRef<FileManagerDialog>);
+  readonly #fileManagerApi = inject(FileManagerApi);
   readonly #datasourceId = inject(MAT_DIALOG_DATA).datasourceId;
-  
+  readonly title = inject(MAT_DIALOG_DATA).title;
+
   readonly files = signal<FileItem[]>([]);
 
   ngOnInit(): void {
@@ -226,7 +201,7 @@ export class CursorRulesManager implements OnInit {
   }
 
   deleteFile(fileName: string): void {
-    const result = this.#fileManagerService.deleteFile(fileName);
+    const result = this.#fileManagerApi.deleteFile(fileName);
     if (result.success) {
       this.#loadFiles();
     } else {
@@ -250,7 +225,7 @@ export class CursorRulesManager implements OnInit {
       },
     ];
 
-    const result = this.#fileManagerService.loadFiles(sampleFiles);
+    const result = this.#fileManagerApi.loadFiles(sampleFiles);
     if (result.success) {
       this.#loadFiles();
     } else {
@@ -263,7 +238,7 @@ export class CursorRulesManager implements OnInit {
   }
 
   exportRules(): void {
-    const exportData = this.#fileManagerService.exportFiles();
+    const exportData = this.#fileManagerApi.exportFiles();
     const dataUri =
       'data:application/json;charset=utf-8,' + encodeURIComponent(exportData);
     const exportFileDefaultName = `cursor-rules-${new Date().toISOString().split('T')[0]}.json`;
@@ -283,13 +258,13 @@ export class CursorRulesManager implements OnInit {
 
   async #loadFiles(): Promise<void> {
     const files = await firstValueFrom(
-      this.#fileManagerService.getFiles$(this.#datasourceId)
+      this.#fileManagerApi.getFiles$(this.#datasourceId)
     );
     this.files.set(files);
   }
 
   #saveFile(file: FileItem): void {
-    const result = this.#fileManagerService.saveFile(file);
+    const result = this.#fileManagerApi.saveFile(file);
     if (result.success) {
       this.#loadFiles();
     } else {

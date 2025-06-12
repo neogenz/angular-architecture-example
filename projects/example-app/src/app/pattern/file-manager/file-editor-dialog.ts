@@ -9,7 +9,7 @@ import {
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
-import { FileItem } from './file-item';
+import { FileItem } from '@core/file-manager/file-item-model';
 
 @Component({
   selector: 'my-org-file-editor-dialog',
