@@ -5,7 +5,6 @@ import {
   inject,
   input,
   resource,
-  ViewContainerRef,
 } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatChipsModule } from '@angular/material/chips';
@@ -18,8 +17,10 @@ import { ProjectGeneralInformationComponent } from './components/project-general
 import { ProjectHeaderComponent } from './components/project-header';
 import { ProjectTeamComponent } from './components/project-team';
 import { ProjectTechnologiesComponent } from './components/project-technologies';
-import { CursorRulesManager } from './cursor-rules-manager/cursor-rules-manager';
-import { CursorRulesManagerService } from './cursor-rules-manager/cursor-rules-manager.service';
+import { ProjectCursorRulesValidator } from './project-cursor-rules-validator';
+import { FileManagerApi } from '@core/file-manager/file-manager-api';
+import { FileManagerDialog } from '@pattern/file-manager/file-manager-dialog';
+import { ProjectFileList } from './components/project-file-list';
 
 @Component({
   selector: 'my-org-project-details',
@@ -32,6 +33,7 @@ import { CursorRulesManagerService } from './cursor-rules-manager/cursor-rules-m
     ProjectTechnologiesComponent,
     ProjectTeamComponent,
     ProjectHeaderComponent,
+    ProjectFileList,
   ],
   template: `
     <div class="min-h-screen bg-surface p-8">
@@ -87,6 +89,17 @@ import { CursorRulesManagerService } from './cursor-rules-manager/cursor-rules-m
 
           <!-- Équipe -->
           <my-org-project-team [team]="project.value()!.team" />
+
+          <!-- Fichiers de règles -->
+          @if (isCursorRulesValid()) {
+            <my-org-project-file-list [files]="projectFiles.value() || []" />
+          } @else {
+            <div class="text-center space-y-4">
+              <p class="text-title-medium text-on-surface">
+                Les fichiers de règles ne sont pas valides
+              </p>
+            </div>
+          }
         </div>
       } @else {
         <div
@@ -114,20 +127,9 @@ import { CursorRulesManagerService } from './cursor-rules-manager/cursor-rules-m
 })
 export default class ProjectDetailsComponent {
   #projectApi = inject(ProjectApi);
-  #cursorRulesManagerService = inject(CursorRulesManagerService);
+  #projectCursorRulesValidator = inject(ProjectCursorRulesValidator);
+  #fileManagerApi = inject(FileManagerApi);
   #dialog = inject(MatDialog);
-
-  /**
-   * Le problème principal
-   * Par défaut, lorsqu'une dialog est ouverte avec MatDialog.open(), elle est créée en dehors de l'arbre des
-   * composants normal et est attachée directement au body du DOM. Cela signifie qu'elle n'a pas accès
-   * automatiquement aux services fournis au niveau des routes ou des composants parents.
-   *
-   * Solutions disponibles
-   * Utilisation de ViewContainerRef
-   * La solution la plus élégante consiste à passer le ViewContainerRef du composant parent dans la configuration de la dialog
-   */
-  #viewContainerRef = inject(ViewContainerRef);
 
   projectId = input.required<string>();
 
@@ -140,7 +142,7 @@ export default class ProjectDetailsComponent {
   projectFiles = resource({
     params: () => this.projectId(),
     loader: ({ params }) =>
-      firstValueFrom(this.#cursorRulesManagerService.getFiles$(params)),
+      firstValueFrom(this.#fileManagerApi.getFiles$(params)),
   });
 
   isCursorRulesValid = computed(() => {
@@ -149,16 +151,17 @@ export default class ProjectDetailsComponent {
     if (!projectValue || !projectFiles) {
       return true;
     }
-    return this.#cursorRulesManagerService.validateProjectRules(
+    return this.#projectCursorRulesValidator.validateProjectRules(
       projectFiles,
       projectValue
     );
   });
 
   openCursorRulesDialog(): void {
-    this.#dialog.open(CursorRulesManager, {
+    this.#dialog.open(FileManagerDialog, {
       data: {
         datasourceId: this.projectId(),
+        title: 'Gestionnaire de règles Cursor',
       },
       width: 'auto',
       maxWidth: '95vw',
@@ -167,7 +170,6 @@ export default class ProjectDetailsComponent {
       maxHeight: '90vh',
       autoFocus: true,
       restoreFocus: true,
-      viewContainerRef: this.#viewContainerRef,
     });
   }
 }

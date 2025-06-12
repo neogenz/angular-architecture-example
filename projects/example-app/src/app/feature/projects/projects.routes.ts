@@ -1,5 +1,5 @@
 import { Routes } from '@angular/router';
-import { CursorRulesManagerService } from './details/cursor-rules-manager/cursor-rules-manager.service';
+import { ProjectCursorRulesValidator } from './details/project-cursor-rules-validator';
 
 export default [
   {
@@ -8,7 +8,7 @@ export default [
   },
   {
     path: ':projectId',
-    providers: [CursorRulesManagerService],
+    providers: [ProjectCursorRulesValidator],
     loadComponent: () => import('./details/project-details'),
   },
 ] as Routes;

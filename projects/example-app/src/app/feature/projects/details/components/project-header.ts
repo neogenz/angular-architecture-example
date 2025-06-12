@@ -20,9 +20,14 @@ import { MatChipsModule } from '@angular/material/chips';
             <h1 class="text-display-medium text-on-surface">
               {{ name() }}
             </h1>
-            <mat-chip [class]="statusClass()" class="h-10">
-              <mat-icon class="mr-2">{{ statusIcon() }}</mat-icon>
-              {{ statusLabel() }}
+            <mat-chip
+              [class]="statusClass()"
+              class="h-10"
+            >
+              <div class="flex items-center justify-center gap-2">
+                <mat-icon class="text-on-surface">{{ statusIcon() }}</mat-icon>
+                {{ statusLabel() }}
+              </div>
             </mat-chip>
           </div>
           <p class="text-title-small text-on-surface-variant">

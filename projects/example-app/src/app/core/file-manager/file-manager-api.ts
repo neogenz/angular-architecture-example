@@ -1,23 +1,27 @@
-import { Injectable } from '@angular/core';
-import { signal } from '@angular/core';
-import { Observable, of, delay } from 'rxjs';
-import { FileItem } from './file-item';
-import { ProjectDetails } from '@features/projects/models/project-details';
+import { Injectable, signal } from '@angular/core';
+import {
+  FileItem,
+  FileOperationResult,
+  FileValidationResult,
+} from './file-item-model';
+import { delay, Observable, of } from 'rxjs';
 
-export interface FileValidationResult {
-  readonly isValid: boolean;
-  readonly errors: string[];
-}
-
-export interface FileOperationResult<T = void> {
-  readonly success: boolean;
-  readonly data?: T;
-  readonly errorMessage?: string;
-}
-
-@Injectable()
-export class CursorRulesManagerService {
-  readonly #files = signal<FileItem[]>([]);
+@Injectable({
+  providedIn: 'root',
+})
+export class FileManagerApi {
+  readonly #files = signal<FileItem[]>([
+    {
+      name: 'rules.md',
+      content: 'rules.md',
+      lastModified: new Date(),
+    },
+    {
+      name: 'rules2.md',
+      content: 'rules2.md',
+      lastModified: new Date(),
+    },
+  ]);
 
   getFiles$(datasourceId: string): Observable<FileItem[]> {
     console.log('getFiles simulé', datasourceId);
@@ -104,19 +108,6 @@ export class CursorRulesManagerService {
     };
 
     return JSON.stringify(exportData, null, 2);
-  }
-
-  validateProjectRules(
-    files: FileItem[],
-    project: ProjectDetails
-  ): FileValidationResult {
-    console.log(
-      'Ceci est une simulation de règles métier propre à un objet projet',
-      files,
-      project
-    );
-
-    return { isValid: false, errors: ['test'] };
   }
 
   #validateRuleFile(fileName: string, content: string): FileValidationResult {

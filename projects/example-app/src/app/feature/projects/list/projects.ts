@@ -12,7 +12,7 @@ import { toSignal } from '@angular/core/rxjs-interop';
     <div class="container mx-auto">
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         @for (project of projects(); track project.id) {
-          <mat-card class="p-4">
+          <mat-card appearance="outlined" class="p-4">
             <mat-card-content>
               <h2 class="text-lg font-semibold mb-2">{{ project.name }}</h2>
               <p class="text-sm mb-4">{{ project.description }}</p>
