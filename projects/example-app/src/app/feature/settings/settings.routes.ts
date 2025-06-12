@@ -4,7 +4,6 @@ import { Settings } from './settings';
 export default [
   {
     path: '',
-    pathMatch: 'full',
     component: Settings,
   },
 ] as Routes;

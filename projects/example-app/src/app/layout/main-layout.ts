@@ -21,13 +21,7 @@ import {
   RouterLinkActive,
   RouterOutlet,
 } from '@angular/router';
-import {
-  filter,
-  map,
-  shareReplay,
-  startWith,
-  throttleTime,
-} from 'rxjs/operators';
+import { filter, map, shareReplay, startWith } from 'rxjs/operators';
 
 interface NavigationItem {
   readonly route: string;
@@ -175,7 +169,12 @@ interface NavigationItem {
             <button mat-icon-button matTooltip="Notifications">
               <mat-icon>notifications</mat-icon>
             </button>
-            <button mat-icon-button matTooltip="Account">
+            <button
+              mat-icon-button
+              matTooltip="Account"
+              (click)="navigateToSettings()"
+              aria-label="Navigate to settings"
+            >
               <mat-icon>account_circle</mat-icon>
             </button>
           </mat-toolbar>
@@ -293,5 +292,17 @@ export class MainLayout {
 
   protected navigateToSettings(): void {
     this.router.navigate(['/settings']);
+  }
+
+  protected navigateToTeam(): void {
+    this.router.navigate(['/team']);
+  }
+
+  protected navigateToHome(): void {
+    this.router.navigate(['/home']);
+  }
+
+  protected navigateToDashboard(): void {
+    this.router.navigate(['/dashboard']);
   }
 }

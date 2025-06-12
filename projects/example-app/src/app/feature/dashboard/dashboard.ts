@@ -8,18 +8,15 @@ import { MatIconModule } from '@angular/material/icon';
   imports: [MatButtonModule, MatCardModule, MatIconModule],
   template: `
     <!-- Example: Using Tailwind with Material 3 CSS Variables -->
-    <div class="space-y-8">
+    <div class="container mx-auto">
       <header class="mb-8">
-        <h1 class="text-3xl font-normal text-[var(--mat-sys-on-surface)] mb-2">
-          Dashboard
-        </h1>
         <p class="text-[var(--mat-sys-on-surface-variant)]">
           Aperçu de vos métriques principales
         </p>
       </header>
 
       <!-- Cards Grid - Pure Tailwind Layout + Material Components -->
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
         <!-- Metric Card - No custom CSS, pure Material + Tailwind -->
         <mat-card appearance="outlined">
           <mat-card-content class="p-6">
@@ -108,9 +105,7 @@ import { MatIconModule } from '@angular/material/icon';
 
       <!-- Actions Section -->
       <section>
-        <h2 class="text-xl font-medium text-[var(--mat-sys-on-surface)] mb-4">
-          Actions rapides
-        </h2>
+        <h2 class="text-title-large mb-4">Actions rapides</h2>
         <div class="flex flex-wrap gap-3">
           <button mat-flat-button color="primary">
             <mat-icon class="mr-2">add</mat-icon>
@@ -126,30 +121,6 @@ import { MatIconModule } from '@angular/material/icon';
           </button>
         </div>
       </section>
-
-      <!-- Demo: Material Components with Tailwind Utilities -->
-      <mat-card class="bg-[var(--mat-sys-surface-container)]">
-        <mat-card-content class="p-6">
-          <h3 class="text-lg font-medium text-[var(--mat-sys-on-surface)] mb-3">
-            💡 Exemple : Tailwind + Variables Material 3
-          </h3>
-          <div class="space-y-3 text-sm">
-            <p class="text-[var(--mat-sys-on-surface-variant)]">
-              <strong>✅ Correct :</strong> Utiliser Tailwind pour le layout et
-              les variables Material 3 pour les couleurs
-            </p>
-            <code
-              class="block bg-[var(--mat-sys-surface-variant)] text-[var(--mat-sys-on-surface-variant)] p-3 rounded"
-            >
-              class="grid grid-cols-3 gap-6 text-[var(--mat-sys-on-surface)]"
-            </code>
-            <p class="text-[var(--mat-sys-on-surface-variant)]">
-              <strong>❌ Éviter :</strong> CSS custom qui redéfinit les styles
-              Material
-            </p>
-          </div>
-        </mat-card-content>
-      </mat-card>
     </div>
   `,
   styles: ``,
