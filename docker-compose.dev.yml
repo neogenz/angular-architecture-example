@@ -1,0 +1,23 @@
+version: '3.8'
+services:
+  angular-dev:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    ports:
+      - '4200:4200'
+    volumes:
+      # 🔥 Volume pour le hot reload (code source seulement)
+      - .:/app
+      # 📦 Volumes isolés pour éviter les conflits
+      - node_modules_volume:/app/node_modules
+      - pnpm_store_volume:/app/.pnpm-store
+    environment:
+      - NODE_ENV=development
+      - NG_CLI_ANALYTICS=false
+    stdin_open: true
+    tty: true
+
+volumes:
+  node_modules_volume:
+  pnpm_store_volume:

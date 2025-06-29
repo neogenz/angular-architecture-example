@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve --open",
+    "start": "ng serve example-app --host 0.0.0.0 --port 4200",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
@@ -41,6 +41,7 @@
     "@angular/compiler-cli": "^20.0.0",
     "@angular/platform-browser-dynamic": "^20.0.0",
     "@eslint/js": "^9.28.0",
+    "@types/node": "^24.0.7",
     "@vitest/ui": "^3.1.4",
     "angular-eslint": "20.0.0",
     "esbuild-visualizer": "^0.7.0",
