@@ -1,0 +1,32 @@
+FROM node:20-alpine
+WORKDIR /app
+
+# Installation de pnpm globalement et des outils système nécessaires
+RUN npm install -g pnpm
+RUN apk add --no-cache graphviz
+
+# Copie du script d'entrypoint
+COPY scripts/docker-entrypoint.sh /docker-entrypoint.sh
+RUN chmod +x /docker-entrypoint.sh
+
+# Copie des fichiers de dépendances
+COPY package.json pnpm-lock.yaml ./
+
+# Installation des dépendances (pour le build, sera vérifiée au runtime)
+RUN pnpm install
+
+# Copie du code source
+COPY . .
+
+# Variables d'environnement pour le développement
+ENV NODE_ENV=development
+ENV NG_CLI_ANALYTICS=false
+
+# Exposition du port de dev
+EXPOSE 4200
+
+# Configuration de l'entrypoint
+ENTRYPOINT ["/docker-entrypoint.sh"]
+
+# Commande de développement
+CMD ["pnpm", "start"]
