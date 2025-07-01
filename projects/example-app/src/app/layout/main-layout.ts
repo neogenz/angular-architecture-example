@@ -300,11 +300,11 @@ export class MainLayout {
     this.router.navigate(['/settings']);
   }
 
-  protected navigateToSettings(): void {
-    this.router.navigate(['/settings']);
+  protected navigateToTeam(): void {
+    this.router.navigate(['/team']);
   }
 
-  protected navigateToSettings(): void {
-    this.router.navigate(['/settings']);
+  protected navigateToHome(): void {
+    this.router.navigate(['/home']);
   }
 }
